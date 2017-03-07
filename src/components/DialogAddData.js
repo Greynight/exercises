@@ -43,14 +43,12 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
   };
 
   generateUsersItems = () => {
-    let users = this.store.getUsersList();
-    let items = [];
+    let users = this.store.getUsers();
 
-    for (let user of users) {
-      items.push(<MenuItem key={user.id} value={user.id} primaryText={user.name} />);
-    }
-
-    return items;
+    return users.map(user => <MenuItem
+      key={user.id}
+      value={user.id}
+      primaryText={user.name} />);
   };
 
   handleUserChange = (event, index, value) => {

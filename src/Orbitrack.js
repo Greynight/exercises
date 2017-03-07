@@ -8,6 +8,7 @@ import Chart from './components/Chart';
 import TopBar from './components/TopBar';
 import StatTypes from './components/StatTypes';
 import Users from './components/Users';
+import Config from './config';
 
 import ObservableStore from './observableStore';
 
@@ -16,6 +17,9 @@ const Orbitrack = observer(class Orbitrack extends React.Component {
     super();
 
     this.store = new ObservableStore;
+
+    this.store.setUsers(Config.users);
+    this.store.setExercises(Config.exercises);
   }
 
   componentDidMount() {

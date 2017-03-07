@@ -2,7 +2,6 @@ import {extendObservable} from 'mobx';
 import axios from 'axios';
 
 const defaultType = 'calories';
-const usersList = [{id: 'ivan', name: 'Ivan'}, {id: 'marina', name: 'Marina'}];
 const typesList = ['calories', 'time', 'distance'];
 
 class ObservableStore {
@@ -16,10 +15,8 @@ class ObservableStore {
     extendObservable(this, {
       data: [],
       type: defaultType,
-      users: {
-        ivan: true,
-        marina: true
-      },
+      users: [],
+      exercises: [],
       isAddDataDialogShown: false,
       chartLoader: false,
       addDataDialogLoader: false
@@ -52,10 +49,6 @@ class ObservableStore {
 
   hideAddDataDialogLoader = () => {
     this.addDataDialogLoader = false;
-  };
-
-  getUsersList = () => {
-    return usersList.map(item => item);
   };
 
   getTypesList = () => {
@@ -131,7 +124,11 @@ class ObservableStore {
   };
 
   setUsers = (users) => {
-    this.users = {...users};
+    this.users = [...users];
+  };
+
+  setExercises = (exercises) => {
+    this.exercises = [...exercises];
   };
 
   getType = () => {

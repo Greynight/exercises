@@ -7,6 +7,7 @@ const Chart = observer(class Chart extends React.Component {
     super(props);
 
     this.store = props.store;
+    this.users = this.store.getUsers();
   }
 
   getData = () => {
@@ -19,6 +20,7 @@ const Chart = observer(class Chart extends React.Component {
     return `${user}.${type}`;
   };
 
+  // TODO chart color
   render() {
     return (
       <ResponsiveContainer width="100%" height="100%" minHeight={500}>
@@ -26,8 +28,12 @@ const Chart = observer(class Chart extends React.Component {
           <XAxis dataKey="date" />
           <YAxis />
           <Legend />
-          {this.store.getUsers().ivan ? <Line connectNulls={true} type="monotone" dataKey={this.getChartType('ivan')} stroke="#8884d8" /> : null}
-          {this.store.getUsers().marina ? <Line connectNulls={true} type="monotone" dataKey={this.getChartType('marina')} stroke="#82ca9d" /> : null}
+          {this.users.map(user => <Line
+            connectNulls={true}
+            key={user.id}
+            type="monotone"
+            dataKey={this.getChartType(user.id)}
+          />)}
         </LineChart>
       </ResponsiveContainer>
     );

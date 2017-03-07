@@ -15,6 +15,7 @@ const Users = observer(class Users extends React.Component {
     super(props);
 
     this.store = props.store;
+    this.users = this.store.getUsers();
   }
 
   onUserChanged = (event, isInputChecked) => {
@@ -26,21 +27,18 @@ const Users = observer(class Users extends React.Component {
   };
 
   render() {
+
     return (
-      <div><Toggle
-        style={styles.toggle}
-        label="Ivan"
-        id="ivan"
-        onToggle={this.onUserChanged}
-        defaultToggled={true}
-      />
-      <Toggle
-        style={styles.toggle}
-        label="Marina"
-        id="marina"
-        onToggle={this.onUserChanged}
-        defaultToggled={true}
-      /></div>
+      <div>
+        {this.users.map(user => <Toggle
+          style={styles.toggle}
+          label={user.name}
+          id={user.id}
+          key={user.id}
+          onToggle={this.onUserChanged}
+          defaultToggled={true}
+        />)}
+      </div>
     );
   }
 });
