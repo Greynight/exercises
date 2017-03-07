@@ -15,22 +15,19 @@ const Users = observer(class Users extends React.Component {
     super(props);
 
     this.store = props.store;
-    this.users = this.store.getUsers();
   }
 
   onUserChanged = (event, isInputChecked) => {
-    let users = this.store.getUsers();
+    let users = this.store.activeUsers;
     let user = event.currentTarget.id;
     users[user] = isInputChecked;
-
-    this.store.setUsers(users);
   };
 
   render() {
 
     return (
       <div>
-        {this.users.map(user => <Toggle
+        {this.store.users.map(user => <Toggle
           style={styles.toggle}
           label={user.name}
           id={user.id}

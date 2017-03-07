@@ -1,9 +1,6 @@
 import {extendObservable} from 'mobx';
 import axios from 'axios';
 
-const defaultType = 'calories';
-const typesList = ['calories', 'time', 'distance'];
-
 class ObservableStore {
 
   // TODO generate ListItem dynamically from some config
@@ -14,9 +11,11 @@ class ObservableStore {
   constructor() {
     extendObservable(this, {
       data: [],
-      type: defaultType,
+      type: null,
       users: [],
+      activeUsers: {},
       exercises: [],
+      activeExercise: null,
       isAddDataDialogShown: false,
       chartLoader: false,
       addDataDialogLoader: false
@@ -49,10 +48,6 @@ class ObservableStore {
 
   hideAddDataDialogLoader = () => {
     this.addDataDialogLoader = false;
-  };
-
-  getTypesList = () => {
-    return typesList;
   };
 
   onDialogAddDataOpen = () => {
@@ -120,15 +115,34 @@ class ObservableStore {
   };
 
   getUsers = () => {
-    return this.users;
+    return this.users.map(user => user);
   };
 
   setUsers = (users) => {
     this.users = [...users];
   };
 
+  // setActiveUsers = (users) => {
+  //   this.activeUsers = [...users];
+  // };
+
+  setDefaultActiveUsers = (users) => {
+    let activeUsers = {};
+    let usersIds = users.map(user => user.id);
+
+    for (let userId of usersIds) {
+      activeUsers[userId] = true;
+    }
+
+    this.activeUsers = {...activeUsers};
+  };
+
   setExercises = (exercises) => {
     this.exercises = [...exercises];
+  };
+
+  getExercises = () => {
+    return this.exercises;
   };
 
   getType = () => {
@@ -137,7 +151,24 @@ class ObservableStore {
 
   setType = (type) => {
     this.type = type;
-  }
+  };
+
+  setActiveExercise = (exercise) => {
+    this.activeExercise = exercise;
+  };
+
+  getActiveExercise = () => {
+    return this.activeExercise;
+  };
+
+  setDefaultDataType = () => {
+    let activeExerciseId = this.getActiveExercise();
+    let activeExercise = this.getExercises().filter(exercise => exercise.id === activeExerciseId)[0];
+    let dataTypes = activeExercise.dataTypes;
+    let defaultDataType = dataTypes[0].id;
+
+    this.setType(defaultDataType);
+  };
 
 }
 

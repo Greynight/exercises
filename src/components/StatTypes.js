@@ -14,7 +14,6 @@ const StatTypes = observer(class StatTypes extends React.Component {
 
   onTypeChange = (event) => {
     let type = event.currentTarget.id;
-
     this.store.setType(type);
   };
 
@@ -29,24 +28,19 @@ const StatTypes = observer(class StatTypes extends React.Component {
   };
 
   render() {
+    let activeExerciseId = this.store.activeExercise;
+    let activeExercise = this.store.getExercises().filter(exercise => exercise.id === activeExerciseId)[0];
+    let dataTypes = activeExercise.dataTypes;
+
     return (
       <List>
-        <ListItem
-          id="calories"
-          primaryText="Calories"
+        {dataTypes.map(datatype => <ListItem
+          id={datatype.id}
+          key={datatype.id}
+          primaryText={datatype.name}
           onClick={this.onTypeChange}
-          leftIcon={<ActionGrade color={this.getIconColor("calories")} />} />
-        <ListItem
-          id="time"
-          primaryText="Time"
-          onClick={this.onTypeChange}
-          leftIcon={<ActionGrade color={this.getIconColor("time")} />}
-        />
-        <ListItem
-          id="distance"
-          primaryText="Distance"
-          onClick={this.onTypeChange}
-          leftIcon={<ActionGrade color={this.getIconColor("distance")} />} />
+          leftIcon={<ActionGrade color={this.getIconColor(datatype.id)} />}
+        />)}
       </List>
     );
   }

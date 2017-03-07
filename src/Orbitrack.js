@@ -9,6 +9,7 @@ import TopBar from './components/TopBar';
 import StatTypes from './components/StatTypes';
 import Users from './components/Users';
 import Config from './config';
+import Exercises from './components/Exercises';
 
 import ObservableStore from './observableStore';
 
@@ -19,7 +20,10 @@ const Orbitrack = observer(class Orbitrack extends React.Component {
     this.store = new ObservableStore;
 
     this.store.setUsers(Config.users);
+    this.store.setDefaultActiveUsers(Config.users);
     this.store.setExercises(Config.exercises);
+    this.store.setActiveExercise(Config.exercises[0].id);
+    this.store.setDefaultDataType();
   }
 
   componentDidMount() {
@@ -31,6 +35,7 @@ const Orbitrack = observer(class Orbitrack extends React.Component {
       <Flex wrap>
         <TopBar store={this.store} />
         <Box col={2}>
+          <Exercises store={this.store} />
           <StatTypes store={this.store} />
         </Box>
         <Box col={8}>
