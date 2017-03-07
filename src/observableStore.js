@@ -3,9 +3,7 @@ import axios from 'axios';
 
 class ObservableStore {
 
-  // TODO generate ListItem dynamically from some config
-  // TODO show which ListItem was chosen
-  // TODO generate togglers dynamically
+  // TODO authorization
   // TODO loader on load/save data
 
   constructor() {

@@ -26,5 +26,5 @@
     "deploy": "gh-pages -d build",
     "clean": "rm -rf node_modules/gh-pages/.cache"
   },
-  "homepage": "https://Greynight.github.io/exerceses"
+  "homepage": "https://Greynight.github.io/exercises"
 }
