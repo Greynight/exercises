@@ -3,12 +3,13 @@ import React from 'react';
 import { Flex, Box } from 'reflexbox';
 import { observer } from 'mobx-react';
 
-import DialogAddData from './components/DialogAddData';
+import Config from './config';
+
+import DialogAddData from './components/DataDialog';
 import Chart from './components/Chart';
 import TopBar from './components/TopBar';
 import StatTypes from './components/StatTypes';
 import Users from './components/Users';
-import Config from './config';
 import Exercises from './components/Exercises';
 
 import ObservableStore from './observableStore';
@@ -17,7 +18,7 @@ const Orbitrack = observer(class Orbitrack extends React.Component {
   constructor() {
     super();
 
-    this.store = new ObservableStore;
+    this.store = new ObservableStore();
 
     this.store.setUsers(Config.users);
     this.store.setDefaultActiveUsers(Config.users);
@@ -26,16 +27,28 @@ const Orbitrack = observer(class Orbitrack extends React.Component {
     this.store.setDefaultDataType();
   }
 
-  componentDidMount() {
+  onExerciseChange = (exercise) => {
+    this.store.setActiveExercise(exercise);
+    this.store.setDefaultDataType();
+  };
+
+  componentDidMount = () => {
     this.store.loadData();
-  }
+  };
 
   render() {
+    const exercise = this.store.getActiveExercise();
+
     return (
       <Flex wrap>
         <TopBar store={this.store} />
         <Box col={2}>
-          <Exercises store={this.store} />
+          <Box m={2}>
+            <Exercises
+              value={exercise}
+              onExerciseChange={this.onExerciseChange}
+              store={this.store} />
+          </Box>
           <StatTypes store={this.store} />
         </Box>
         <Box col={8}>

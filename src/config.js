@@ -13,10 +13,10 @@ export default {
       name: 'Calories'
     }, {
       id: 'time',
-      name: 'Time'
+      name: 'Time, min'
     }, {
       id: 'distance',
-      name: 'Distance'
+      name: 'Distance, km'
     }],
     dataKey: 'date'
   }, {

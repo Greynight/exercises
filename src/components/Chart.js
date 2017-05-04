@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Legend } from 'recharts';
+import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Legend, Tooltip } from 'recharts';
 
 const Chart = observer(class Chart extends React.Component {
   constructor(props) {
@@ -10,11 +10,17 @@ const Chart = observer(class Chart extends React.Component {
   }
 
   getData = () => {
-    return this.store.getData();
+    const data = this.store.getData();
+
+    if (data) {
+      console.log(data);
+    }
+
+    return data ? data.map(item => item) : [];
   };
 
   getChartType = (user) => {
-    let type = this.store.type;
+    let type = this.store.activeType;
     return `${user}.${type}`;
   };
 
@@ -32,6 +38,7 @@ const Chart = observer(class Chart extends React.Component {
         <LineChart data={this.getData()} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
           <XAxis dataKey="date" />
           <YAxis />
+          <Tooltip/>
           <Legend />
           {charts}
         </LineChart>

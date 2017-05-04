@@ -11,12 +11,14 @@ import TextField from 'material-ui/TextField';
 
 import { Flex, Box } from 'reflexbox';
 
+import Exercises from './Exercises';
+
 const styles = {
-  rightBlock: {
-    paddingLeft: 20
-  },
   customWidth: {
     width: 164,
+  },
+  exercises: {
+    width: 164
   }
 };
 
@@ -25,21 +27,26 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
     super(props);
 
     this.store = props.store;
+
     this.state = {
-      date: new Date,
-      calories: undefined,
-      time: undefined,
-      distance: undefined,
-      user: undefined
+      date: new Date(),
+      exercise: this.store.getExercises()[0].id,
+      values: {},
+      user: null
     };
   }
 
   saveData = () => {
     let date = this.state.date;
+    // TODO format date?
     let changedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
     let data = {...this.state, date: changedDate};
 
     this.store.saveData(data);
+  };
+
+  onExerciseChange = (exercise) => {
+    this.setState({exercise});
   };
 
   generateUsersItems = () => {
@@ -51,28 +58,8 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
       primaryText={user.name} />);
   };
 
-  handleUserChange = (event, index, value) => {
-    this.setState({user: value});
-  };
-
-  handleDateChange = (event, value) => {
-    this.setState({date: value});
-  };
-
-  handleCaloriesChange = (event, value) => {
-    this.setState({calories: +value});
-  };
-
-  handleTimeChange = (event, value) => {
-    this.setState({time: +value});
-  };
-
-  handleDistanceChange = (event, value) => {
-    this.setState({distance: +value});
-  };
-
-  render() {
-    const actions = [
+  generateActions = () => {
+    return [
       <FlatButton
         label="Ok"
         primary={true}
@@ -84,10 +71,54 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
         primary={false}
         keyboardFocused={false}
         onTouchTap={this.store.hideAddDataDialog}
-      />,
+      />
     ];
+  };
 
-    let usersItems = this.generateUsersItems();
+  generateFields = () => {
+    const activeExerciseId = this.state.exercise;
+    const activeExercise = this.store.getExercises().filter(exercise => exercise.id === activeExerciseId)[0];
+    const dataTypes = activeExercise.dataTypes;
+
+    return dataTypes.map((datatype, index) => {
+      const paddingLeft = index === 0 ? 0 : 2;
+
+      return <Box pl={paddingLeft} key={`box-${datatype.id}`}>
+        <TextField
+          type="number"
+          name={datatype.id}
+          key={datatype.id}
+          floatingLabelText={datatype.name}
+          hintText={datatype.name}
+          onChange={this.onItemChange}
+          style={styles.customWidth}
+        />
+      </Box>
+    });
+  };
+
+  onUserChange = (event, index, value) => {
+    this.setState({user: value});
+  };
+
+  onItemChange = (event, value) => {
+    const type = event.currentTarget.name;
+    const values = {...this.state.values};
+
+    values[type] = +value;
+
+    this.setState({values});
+  };
+
+  onDateChange = (event, value) => {
+    this.setState({date: value});
+  };
+
+  render() {
+    const actions = this.generateActions();
+    const usersItems = this.generateUsersItems();
+    const fields = this.generateFields();
+    const exercise = this.state.exercise;
 
     return (
       <div>
@@ -98,48 +129,31 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
           open={this.store.onDialogAddDataOpen()}
         >
           <Flex align="flex-end">
-            <Box>
+            <Box pr={2}>
               <SelectField
                 floatingLabelText="User"
                 value={this.state.user}
-                onChange={this.handleUserChange}
+                onChange={this.onUserChange}
+                style={styles.customWidth}
               >
                 {usersItems}
               </SelectField>
             </Box>
-            <Box style={styles.rightBlock} >
+            <Exercises
+              value={exercise}
+              store={this.store}
+              onExerciseChange={this.onExerciseChange}
+            />
+            <Box pl={2}>
               <DatePicker
                 value={this.state.date}
                 hintText="Date Picker"
-                onChange={this.handleDateChange}
+                onChange={this.onDateChange}
               />
             </Box>
           </Flex>
           <Flex>
-            <Box>
-              <TextField
-                type="number"
-                hintText="Calories"
-                onChange={this.handleCaloriesChange}
-                style={styles.customWidth}
-              />
-            </Box>
-            <Box style={styles.rightBlock} >
-              <TextField
-                type="number"
-                hintText="Time, minutes"
-                onChange={this.handleTimeChange}
-                style={styles.customWidth}
-              />
-            </Box>
-            <Box style={styles.rightBlock} >
-              <TextField
-                type="number"
-                hintText="Distance, km"
-                onChange={this.handleDistanceChange}
-                style={styles.customWidth}
-              />
-            </Box>
+            {fields}
           </Flex>
         </Dialog>
       </div>

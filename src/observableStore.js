@@ -1,4 +1,4 @@
-import {extendObservable} from 'mobx';
+import {extendObservable, toJS} from 'mobx';
 import axios from 'axios';
 
 class ObservableStore {
@@ -9,20 +9,187 @@ class ObservableStore {
   constructor() {
     extendObservable(this, {
       data: [],
-      type: null,
       users: [],
-      activeUsers: {},
       exercises: [],
+
+      activeType: null,
+      activeUsers: {},
       activeExercise: null,
-      isAddDataDialogShown: false,
-      chartLoader: false,
-      addDataDialogLoader: false
+
+      isAddDataDialogShown: false,//TODO
+      chartLoader: false,// TODO
+      addDataDialogLoader: false//TODO
     });
 
     this.dataSource = axios.create({
       baseURL: process.env.REACT_APP_BASE_URL
     });
   }
+
+  /**
+   * Getters/Setters
+   */
+
+  /**
+   * Set chart data
+   * @param data
+   */
+  setData = (data) => {
+    this.data = {...data};
+  };
+
+  /**
+   * Get data by exercise
+   */
+  getData = () => {
+    const activeExercise = this.getActiveExercise();
+
+    return this.data[activeExercise] ? this.data[activeExercise].map(item => toJS(item)) : [];
+  };
+
+  /**
+   * Get users list
+   * @returns {Array}
+   */
+  getUsers = () => {
+    return toJS(this.users);
+  };
+
+  /**
+   * Set users list
+   * @param users
+   */
+  setUsers = (users) => {
+    this.users = [...users];
+  };
+
+  /**
+   * Set default active users
+   * @param users
+   */
+  setDefaultActiveUsers = (users) => {
+    let activeUsers = {};
+    let usersIds = users.map(user => user.id);
+
+    for (let userId of usersIds) {
+      activeUsers[userId] = true;
+    }
+
+    this.activeUsers = {...activeUsers};
+  };
+
+  /**
+   * Set exercises list
+   * @param exercises
+   */
+  setExercises = (exercises) => {
+    this.exercises = [...exercises];
+  };
+
+  /**
+   * Get exercises list
+   * @returns {Array|styles.exercises|{width}|[*]|*}
+   */
+  getExercises = () => {
+    return this.exercises;
+  };
+
+  /**
+   * Get active exercise type
+   * @returns {null|*}
+   */
+  getType = () => {
+    return this.activeType;
+  };
+
+  /**
+   * Set active exercise type
+   * @param activeType
+   */
+  setType = (activeType) => {
+    this.activeType = activeType;
+  };
+
+  /**
+   * Set active exercise
+   * @param exercise
+   */
+  setActiveExercise = (exercise) => {
+    this.activeExercise = exercise;
+  };
+
+  /**
+   * Get active exercise
+   * @returns {null|*}
+   */
+  getActiveExercise = () => {
+    return this.activeExercise;
+  };
+
+  /**
+   * Set default type for active exercise
+   */
+  setDefaultDataType = () => {
+    let activeExerciseId = this.getActiveExercise();
+    let activeExercise = this.getExercises().filter(exercise => exercise.id === activeExerciseId)[0];
+    let dataTypes = activeExercise.dataTypes;
+    let defaultDataType = dataTypes[0].id;
+
+    this.setType(defaultDataType);
+  };
+
+
+  /**
+   * Data processing
+   */
+
+  /**
+   * Save new data in database
+   * @param data
+   */
+  saveData = (data) => {
+    this.dataSource.post(process.env.REACT_APP_POST_DATA_URL, {data}).then(res => {
+      this.hideAddDataDialog();
+      this.loadData();
+    }).catch((err) => {
+      console.error(err);
+      this.hideAddDataDialog();
+    });
+  };
+
+
+
+  // TODO timeout, cash in some storage
+  /**
+   * Get statistics from server
+   */
+  loadData = () => {
+    this.dataSource.get(process.env.REACT_APP_GET_DATA_URL, {}).then(res => {
+      let chartData = res.data;
+      let dataObj = {};
+      let exercises = this.getExercises().map(item => item.id);
+
+      for (let exercise of exercises) {
+        dataObj[exercise] = [];
+      }
+
+      for (let dataItem of chartData) {
+        let dataItemObj = {};
+        let {exercise, user, date, values} = dataItem;
+
+        // dataItemObj[date] = {date};
+        // dataItemObj[date][user] = {...values};
+        dataItemObj[user] = {...values};
+        dataItemObj.date = (new Date(date)).getTime();
+
+        dataObj[exercise].push(dataItemObj);
+      }
+
+      this.setData(dataObj);
+    }).catch((err) => {
+      // TODO maybe get from localStorage
+    });
+  };
 
   isChartLoaderShown = () => {
     return this.chartLoader;
@@ -64,109 +231,16 @@ class ObservableStore {
 
   };
 
-  saveData = (data) => {
-    this.dataSource.post(process.env.REACT_APP_POST_DATA_URL, {data}).then(res => {
-      this.hideAddDataDialog();
-      this.loadData();
-    }).catch((err) => {
-      console.error(err);
-      this.hideAddDataDialog();
-    });
-  };
 
-  setData = (data) => {
-    this.data = [...data];
-  };
 
-  getData = () => {
-    return this.data.map(item => item);
-  };
 
-  // TODO timeout, cash in some storage
-  loadData = () => {
-    this.dataSource.get(process.env.REACT_APP_GET_DATA_URL, {}).then(res => {
-      let chartData = res.data.map(item => item.data);
-      let dataObj = {};
-      let data = [];
 
-      for (let dataItem of chartData) {
-        if (!dataObj[dataItem.date]) {
-          dataObj[dataItem.date] = {};
-        }
 
-        dataObj[dataItem.date].date = dataItem.date;
-        dataObj[dataItem.date][`${dataItem.user}.calories`] = dataItem.calories;
-        dataObj[dataItem.date][`${dataItem.user}.time`] = dataItem.time;
-        dataObj[dataItem.date][`${dataItem.user}.distance`] = dataItem.distance;
-      }
-
-      let days = Object.keys(dataObj);
-
-      for (let day of days) {
-        data.push(dataObj[day]);
-      }
-
-      this.setData(data);
-    }).catch((err) => {
-      // maybe get from localStorage
-    });
-  };
-
-  getUsers = () => {
-    return this.users.map(user => user);
-  };
-
-  setUsers = (users) => {
-    this.users = [...users];
-  };
 
   // setActiveUsers = (users) => {
   //   this.activeUsers = [...users];
   // };
 
-  setDefaultActiveUsers = (users) => {
-    let activeUsers = {};
-    let usersIds = users.map(user => user.id);
-
-    for (let userId of usersIds) {
-      activeUsers[userId] = true;
-    }
-
-    this.activeUsers = {...activeUsers};
-  };
-
-  setExercises = (exercises) => {
-    this.exercises = [...exercises];
-  };
-
-  getExercises = () => {
-    return this.exercises;
-  };
-
-  getType = () => {
-    return this.type;
-  };
-
-  setType = (type) => {
-    this.type = type;
-  };
-
-  setActiveExercise = (exercise) => {
-    this.activeExercise = exercise;
-  };
-
-  getActiveExercise = () => {
-    return this.activeExercise;
-  };
-
-  setDefaultDataType = () => {
-    let activeExerciseId = this.getActiveExercise();
-    let activeExercise = this.getExercises().filter(exercise => exercise.id === activeExerciseId)[0];
-    let dataTypes = activeExercise.dataTypes;
-    let defaultDataType = dataTypes[0].id;
-
-    this.setType(defaultDataType);
-  };
 
 }
 

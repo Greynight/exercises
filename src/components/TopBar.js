@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
-import AppBarMenu from './AppBarMenu';
+import AppBarMenu from './TopBarMenu';
 import AppBar from 'material-ui/AppBar';
 
 const TopBar = observer(class TopBar extends React.Component {
