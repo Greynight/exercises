@@ -170,22 +170,29 @@ class ObservableStore {
       let exercises = this.getExercises().map(item => item.id);
 
       for (let exercise of exercises) {
-        dataObj[exercise] = [];
+        dataObj[exercise] = {};
       }
 
       for (let dataItem of chartData) {
-        let dataItemObj = {};
         let {exercise, user, date, values} = dataItem;
 
-        // dataItemObj[date] = {date};
-        // dataItemObj[date][user] = {...values};
-        dataItemObj[user] = {...values};
-        dataItemObj.date = (new Date(date)).getTime();
-
-        dataObj[exercise].push(dataItemObj);
+        dataObj[exercise][date] = dataObj[exercise][date] || {};
+        dataObj[exercise][date][user] = {...values};
+        dataObj[exercise][date].date = new Date(+date);
+        dataObj[exercise][date].dateTime = +date;
       }
 
-      this.setData(dataObj);
+      let data = {};
+
+      for (let exercise of exercises) {
+        data[exercise] = Object.values(dataObj[exercise]);
+
+        data[exercise].sort((a, b) => {
+          return a.dateTime - b.dateTime;
+        });
+      }
+
+      this.setData(data);
     }).catch((err) => {
       // TODO maybe get from localStorage
     });

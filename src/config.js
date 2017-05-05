@@ -1,9 +1,12 @@
 export default {
   users: [{
     id: 'marina',
-    name: 'Marina'
+    name: 'Marina',
+    color: 'green'
   }, {
-    id: 'ivan', name: 'Ivan'
+    id: 'ivan',
+    name: 'Ivan',
+    color: 'grey'
   }],
   exercises: [{
     id: 'orbitrack',

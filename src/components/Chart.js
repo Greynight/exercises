@@ -30,6 +30,7 @@ const Chart = observer(class Chart extends React.Component {
       connectNulls={true}
       key={user.id}
       type="monotone"
+      stroke={user.color}
       dataKey={this.getChartType(user.id)}
     />);
 
