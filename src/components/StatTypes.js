@@ -12,25 +12,19 @@ const StatTypes = observer(class StatTypes extends React.Component {
     this.store = props.store;
   }
 
-  onTypeChange = (event) => {
+  handleTypeChange = (event) => {
     let type = event.currentTarget.id;
     this.store.setType(type);
   };
 
   getIconColor = (type) => {
-    let color = '';
-
-    if (type === this.store.getType()) {
-      color = yellow500;
-    }
-
-    return color;
+    return type === this.store.getType() ? yellow500 : '';
   };
 
   render() {
-    let activeExerciseId = this.store.activeExercise;
-    let activeExercise = this.store.getExercises().filter(exercise => exercise.id === activeExerciseId)[0];
-    let dataTypes = activeExercise.dataTypes;
+    const activeExerciseId = this.store.activeExercise;
+    const activeExercise = this.store.getExercises().filter(exercise => exercise.id === activeExerciseId)[0];
+    const dataTypes = activeExercise.dataTypes;
 
     return (
       <List>
@@ -38,7 +32,7 @@ const StatTypes = observer(class StatTypes extends React.Component {
           id={datatype.id}
           key={datatype.id}
           primaryText={datatype.name}
-          onClick={this.onTypeChange}
+          onClick={this.handleTypeChange}
           leftIcon={<ActionGrade color={this.getIconColor(datatype.id)} />}
         />)}
       </List>

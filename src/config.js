@@ -8,6 +8,7 @@ export default {
     name: 'Ivan',
     color: 'grey'
   }],
+
   exercises: [{
     id: 'orbitrack',
     name: 'Orbitrack',

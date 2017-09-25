@@ -13,7 +13,7 @@ const Exercises = observer(class Exercises extends React.Component {
     this.onExerciseChange = props.onExerciseChange;
   }
 
-  onChange = (event, index, value) => {
+  handleExerciseChange = (event, index, value) => {
     this.onExerciseChange(value);
   };
 
@@ -25,7 +25,7 @@ const Exercises = observer(class Exercises extends React.Component {
         style={this.style}
         floatingLabelText="Exercises"
         value={value}
-        onChange={this.onChange}
+        onChange={this.handleExerciseChange}
       >
         {this.exercises.map(exercise => <MenuItem
           key={exercise.id}

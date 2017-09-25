@@ -3,7 +3,6 @@ import axios from 'axios';
 
 class ObservableStore {
 
-  // TODO authorization
   // TODO loader on load/save data
 
   constructor() {
@@ -233,22 +232,6 @@ class ObservableStore {
   hideAddDataDialog = () => {
     this.isAddDataDialogShown = false;
   };
-
-  showEditUsersDialog = () => {
-
-  };
-
-
-
-
-
-
-
-  // setActiveUsers = (users) => {
-  //   this.activeUsers = [...users];
-  // };
-
-
 }
 
 export default ObservableStore;

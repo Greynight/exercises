@@ -9,9 +9,14 @@ const Chart = observer(class Chart extends React.Component {
     this.store = props.store;
   }
 
+  /**
+   * Returns data for a chart
+   * @returns {Array}
+   */
   getData = () => {
     const data = this.store.getData();
 
+    // TODO only in debug mode
     if (data) {
       console.log(data);
     }
@@ -19,12 +24,21 @@ const Chart = observer(class Chart extends React.Component {
     return data ? data.map(item => item) : [];
   };
 
+  /**
+   * Return chart type based on active exercise type and active user
+   * @param user
+   * @returns {string}
+   */
   getChartType = (user) => {
     let type = this.store.activeType;
     return `${user}.${type}`;
   };
 
-  // TODO chart color
+  formatXAxis = (tickItem) => {
+    const date = new Date(tickItem);
+    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  };
+
   render() {
     let charts = this.store.users.filter(user => !!this.store.activeUsers[user.id]).map(user => <Line
       connectNulls={true}
@@ -37,7 +51,7 @@ const Chart = observer(class Chart extends React.Component {
     return (
       <ResponsiveContainer width="100%" height="100%" minHeight={500}>
         <LineChart data={this.getData()} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-          <XAxis dataKey="date" />
+          <XAxis dataKey="dateTime" tickFormatter={this.formatXAxis} />
           <YAxis />
           <Tooltip/>
           <Legend />

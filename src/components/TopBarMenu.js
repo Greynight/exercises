@@ -14,7 +14,6 @@ const AppBarMenu = observer(class AppBarMenu extends React.Component {
     this.store = props.store;
   }
 
-  // TODO show this button only to some users
   render() {
     return (
       <IconMenu

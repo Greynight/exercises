@@ -17,10 +17,10 @@ const Users = observer(class Users extends React.Component {
     this.store = props.store;
   }
 
-  onUserChanged = (event, isInputChecked) => {
-    let users = this.store.activeUsers;
-    let user = event.currentTarget.id;
-    users[user] = isInputChecked;
+  handleUserChanged = (event, isInputChecked) => {
+    const users = this.store.activeUsers;
+    const userId = event.currentTarget.id;
+    users[userId] = isInputChecked;
   };
 
   render() {
@@ -32,7 +32,7 @@ const Users = observer(class Users extends React.Component {
           label={user.name}
           id={user.id}
           key={user.id}
-          onToggle={this.onUserChanged}
+          onToggle={this.handleUserChanged}
           defaultToggled={true}
         />)}
       </div>

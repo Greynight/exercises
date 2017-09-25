@@ -37,15 +37,12 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
   }
 
   saveData = () => {
-    let date = this.state.date;
-    // TODO format date?
-    let changedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-    let data = {...this.state, date: changedDate};
+    let data = {...this.state, date: this.state.date.getTime()};
 
     this.store.saveData(data);
   };
 
-  onExerciseChange = (exercise) => {
+  handleExerciseChange = (exercise) => {
     this.setState({exercise});
   };
 
@@ -90,18 +87,18 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
           key={datatype.id}
           floatingLabelText={datatype.name}
           hintText={datatype.name}
-          onChange={this.onItemChange}
+          onChange={this.handleItemChange}
           style={styles.customWidth}
         />
       </Box>
     });
   };
 
-  onUserChange = (event, index, value) => {
+  handleUserChange = (event, index, value) => {
     this.setState({user: value});
   };
 
-  onItemChange = (event, value) => {
+  handleItemChange = (event, value) => {
     const type = event.currentTarget.name;
     const values = {...this.state.values};
 
@@ -110,7 +107,7 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
     this.setState({values});
   };
 
-  onDateChange = (event, value) => {
+  handleDateChange = (event, value) => {
     this.setState({date: value});
   };
 
@@ -133,7 +130,7 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
               <SelectField
                 floatingLabelText="User"
                 value={this.state.user}
-                onChange={this.onUserChange}
+                onChange={this.handleUserChange}
                 style={styles.customWidth}
               >
                 {usersItems}
@@ -142,13 +139,13 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
             <Exercises
               value={exercise}
               store={this.store}
-              onExerciseChange={this.onExerciseChange}
+              onExerciseChange={this.handleExerciseChange}
             />
             <Box pl={2}>
               <DatePicker
                 value={this.state.date}
                 hintText="Date Picker"
-                onChange={this.onDateChange}
+                onChange={this.handleDateChange}
               />
             </Box>
           </Flex>
