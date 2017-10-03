@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Orbitrack from './Orbitrack';
+
+import AppContainer from './AppContainer';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -14,7 +15,7 @@ injectTapEventPlugin();
 
 const App = () => (
   <MuiThemeProvider>
-    <Orbitrack />
+    <AppContainer />
   </MuiThemeProvider>
 );
 

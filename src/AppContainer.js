@@ -14,10 +14,9 @@ import Exercises from './components/Exercises';
 
 import ObservableStore from './observableStore';
 
-const Orbitrack = observer(class Orbitrack extends React.Component {
+const AppContainer = observer(class Orbitrack extends React.Component {
   constructor() {
     super();
-
     this.store = new ObservableStore();
 
     this.store.setUsers(Config.users);
@@ -65,8 +64,8 @@ const Orbitrack = observer(class Orbitrack extends React.Component {
   }
 });
 
-Orbitrack.childContextTypes = {
+AppContainer.childContextTypes = {
   muiTheme: React.PropTypes.object.isRequired,
 };
 
-export default Orbitrack;
+export default AppContainer;

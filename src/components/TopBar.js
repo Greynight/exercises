@@ -14,7 +14,7 @@ const TopBar = observer(class TopBar extends React.Component {
   render() {
     return (
       <AppBar
-        title="Orbitrack statistics"
+        title="Exercises statistics"
         iconElementRight={<AppBarMenu store={this.store} />}
         showMenuIconButton={false}
       />
