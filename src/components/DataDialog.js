@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { observer } from 'mobx-react';
-
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import DatePicker from 'material-ui/DatePicker';
 import SelectField from 'material-ui/SelectField';
+import FlatButton from 'material-ui/FlatButton';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import Add from 'material-ui/svg-icons/content/add';
 
 import { Flex, Box } from 'reflexbox';
 
@@ -15,44 +14,31 @@ import Exercises from './Exercises';
 
 const styles = {
   customWidth: {
-    width: 164,
-  },
-  exercises: {
     width: 164
+  },
+  iconStyle: {
+    paddingTop: 20,
+    cursor: 'pointer'
   }
 };
 
-const DialogAddData = observer(class DialogAddData extends React.Component {
+class DialogData extends React.Component {
   constructor(props) {
     super(props);
 
-    this.store = props.store;
-
     this.state = {
       date: new Date(),
-      exercise: this.store.getExercises()[0].id,
+      exerciseId: props.exercises[0].id,
       values: {},
-      user: null
+      user: null,
+      exercises: props.exercises,
+      users: props.users,
+      number: 1
     };
   }
 
-  saveData = () => {
-    let data = {...this.state, date: this.state.date.getTime()};
-
-    this.store.saveData(data);
-  };
-
-  handleExerciseChange = (exercise) => {
-    this.setState({exercise});
-  };
-
-  generateUsersItems = () => {
-    let users = this.store.getUsers();
-
-    return users.map(user => <MenuItem
-      key={user.id}
-      value={user.id}
-      primaryText={user.name} />);
+  capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   generateActions = () => {
@@ -61,61 +47,86 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
         label="Ok"
         primary={true}
         keyboardFocused={true}
-        onTouchTap={this.saveData.bind(this)}
+        onTouchTap={this.props.handleDataSave}
       />,
       <FlatButton
         label="Cancel"
         primary={false}
         keyboardFocused={false}
-        onTouchTap={this.store.hideAddDataDialog}
+        onTouchTap={this.props.handleDataDialogHide}
       />
     ];
   };
 
-  generateFields = () => {
-    const activeExerciseId = this.state.exercise;
-    const activeExercise = this.store.getExercises().filter(exercise => exercise.id === activeExerciseId)[0];
-    const dataTypes = activeExercise.dataTypes;
+  generateUsersItems = () => {
+    return this.state.users.map(user => <MenuItem
+      key={user.id}
+      value={user.id}
+      primaryText={user.name} />);
+  };
 
-    return dataTypes.map((datatype, index) => {
+  generateFields = (num) => {
+    const activeExercise = this.state.exercises.find(exercise => exercise.id === this.state.exerciseId);
+
+    return activeExercise.results.map((param, index) => {
       const paddingLeft = index === 0 ? 0 : 2;
+      const paramName = this.capitalizeFirstLetter(param);
 
-      return <Box pl={paddingLeft} key={`box-${datatype.id}`}>
-        <TextField
-          type="number"
-          name={datatype.id}
-          key={datatype.id}
-          floatingLabelText={datatype.name}
-          hintText={datatype.name}
-          onChange={this.handleItemChange}
-          style={styles.customWidth}
-        />
-      </Box>
+      return (
+        <Flex key={num}>
+          <Box pl={paddingLeft} key={`box-${param}-${num}`}>
+            <TextField
+              type="number"
+              name={paramName}
+              key={`field-${param}-${num}`}
+              floatingLabelText={paramName}
+              hintText={paramName}
+              onChange={this.handleParamChange}
+              style={styles.customWidth}
+            />
+          </Box>
+        </Flex>
+      );
     });
   };
 
   handleUserChange = (event, index, value) => {
-    this.setState({user: value});
+    this.setState({user: value, number: 1});
   };
 
-  handleItemChange = (event, value) => {
+  handleParamChange = (event, value) => {
     const type = event.currentTarget.name;
     const values = {...this.state.values};
 
     values[type] = +value;
 
-    this.setState({values});
+    this.setState({values, number: 1});
   };
 
   handleDateChange = (event, value) => {
     this.setState({date: value});
   };
 
+  handleExerciseChange = (event, index, exerciseId) => {
+    this.setState({exerciseId, number: 1});
+
+  };
+
+  handleOnAddClick = () => {
+    const number = ++this.state.number;
+    this.setState({number});
+  };
+
   render() {
+    const num = this.state.number;
+
     const actions = this.generateActions();
     const usersItems = this.generateUsersItems();
-    const fields = this.generateFields();
-    const exercise = this.state.exercise;
+    const fields = [];
+
+    for (let i = 1; i <= num; i++) {
+      fields.push(this.generateFields(i));
+    }
 
     return (
       <div>
@@ -123,7 +134,7 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
           title="Add data"
           actions={actions}
           modal={false}
-          open={this.store.onDialogAddDataOpen()}
+          open={this.props.isOpen}
         >
           <Flex align="flex-end">
             <Box pr={2}>
@@ -137,9 +148,9 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
               </SelectField>
             </Box>
             <Exercises
-              value={exercise}
-              store={this.store}
-              onExerciseChange={this.handleExerciseChange}
+              value={this.state.exerciseId}
+              exercises={this.props.exercises}
+              handleExerciseChange={this.handleExerciseChange}
             />
             <Box pl={2}>
               <DatePicker
@@ -149,13 +160,15 @@ const DialogAddData = observer(class DialogAddData extends React.Component {
               />
             </Box>
           </Flex>
-          <Flex>
-            {fields}
-          </Flex>
+          <Add
+            style={styles.iconStyle}
+            onClick={this.handleOnAddClick}
+          />
+          {fields}
         </Dialog>
       </div>
     );
   }
-});
+}
 
-export default DialogAddData;
+export default DialogData;

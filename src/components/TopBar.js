@@ -1,25 +1,16 @@
 import React from 'react';
-import { observer } from 'mobx-react';
 
-import AppBarMenu from './TopBarMenu';
+import TopBarMenuContainer from './TopBarMenuContainer';
 import AppBar from 'material-ui/AppBar';
 
-const TopBar = observer(class TopBar extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.store = props.store;
-  }
-
-  render() {
-    return (
-      <AppBar
-        title="Exercises statistics"
-        iconElementRight={<AppBarMenu store={this.store} />}
-        showMenuIconButton={false}
-      />
-    );
-  }
-});
+const TopBar = () => {
+  return (
+    <AppBar
+      title="Exercises statistics"
+      iconElementRight={<TopBarMenuContainer />}
+      showMenuIconButton={false}
+    />
+  );
+};
 
 export default TopBar;

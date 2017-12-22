@@ -26,18 +26,6 @@ class ObservableStore {
   }
 
   /**
-   * Getters/Setters
-   */
-
-  /**
-   * Set chart data
-   * @param data
-   */
-  setData = (data) => {
-    this.data = {...data};
-  };
-
-  /**
    * Get data by exercise
    */
   getData = () => {
@@ -45,98 +33,6 @@ class ObservableStore {
 
     return this.data[activeExercise] ? this.data[activeExercise].map(item => toJS(item)) : [];
   };
-
-  /**
-   * Get users list
-   * @returns {Array}
-   */
-  getUsers = () => {
-    return toJS(this.users);
-  };
-
-  /**
-   * Set users list
-   * @param users
-   */
-  setUsers = (users) => {
-    this.users = [...users];
-  };
-
-  /**
-   * Set default active users
-   * @param users
-   */
-  setDefaultActiveUsers = (users) => {
-    let activeUsers = {};
-    let usersIds = users.map(user => user.id);
-
-    for (let userId of usersIds) {
-      activeUsers[userId] = true;
-    }
-
-    this.activeUsers = {...activeUsers};
-  };
-
-  /**
-   * Set exercises list
-   * @param exercises
-   */
-  setExercises = (exercises) => {
-    this.exercises = [...exercises];
-  };
-
-  /**
-   * Get exercises list
-   * @returns {Array|styles.exercises|{width}|[*]|*}
-   */
-  getExercises = () => {
-    return this.exercises;
-  };
-
-  /**
-   * Get active exercise type
-   * @returns {null|*}
-   */
-  getType = () => {
-    return this.activeType;
-  };
-
-  /**
-   * Set active exercise type
-   * @param activeType
-   */
-  setType = (activeType) => {
-    this.activeType = activeType;
-  };
-
-  /**
-   * Set active exercise
-   * @param exercise
-   */
-  setActiveExercise = (exercise) => {
-    this.activeExercise = exercise;
-  };
-
-  /**
-   * Get active exercise
-   * @returns {null|*}
-   */
-  getActiveExercise = () => {
-    return this.activeExercise;
-  };
-
-  /**
-   * Set default type for active exercise
-   */
-  setDefaultDataType = () => {
-    let activeExerciseId = this.getActiveExercise();
-    let activeExercise = this.getExercises().filter(exercise => exercise.id === activeExerciseId)[0];
-    let dataTypes = activeExercise.dataTypes;
-    let defaultDataType = dataTypes[0].id;
-
-    this.setType(defaultDataType);
-  };
-
 
   /**
    * Data processing
@@ -197,28 +93,8 @@ class ObservableStore {
     });
   };
 
-  isChartLoaderShown = () => {
-    return this.chartLoader;
-  };
-
   isAddDataDialogShown = () => {
     return this.addDataDialogLoader;
-  };
-
-  showChartLoader = () => {
-    this.chartLoader = true;
-  };
-
-  hideChartLoader = () => {
-    this.chartLoader = false;
-  };
-
-  showAddDataDialogLoader = () => {
-    this.addDataDialogLoader = true;
-  };
-
-  hideAddDataDialogLoader = () => {
-    this.addDataDialogLoader = false;
   };
 
   onDialogAddDataOpen = () => {

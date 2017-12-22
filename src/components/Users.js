@@ -1,6 +1,4 @@
 import React from 'react';
-import { observer } from 'mobx-react';
-
 import Toggle from 'material-ui/Toggle';
 
 const styles = {
@@ -10,34 +8,19 @@ const styles = {
   }
 };
 
-const Users = observer(class Users extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.store = props.store;
-  }
-
-  handleUserChanged = (event, isInputChecked) => {
-    const users = this.store.activeUsers;
-    const userId = event.currentTarget.id;
-    users[userId] = isInputChecked;
-  };
-
-  render() {
-
-    return (
-      <div>
-        {this.store.users.map(user => <Toggle
-          style={styles.toggle}
-          label={user.name}
-          id={user.id}
-          key={user.id}
-          onToggle={this.handleUserChanged}
-          defaultToggled={true}
-        />)}
-      </div>
-    );
-  }
-});
+const Users = ({ users, handleUserChange }) => {
+  return (
+    <div>
+      {users.map(user => <Toggle
+        style={styles.toggle}
+        label={user.name}
+        id={user.id}
+        key={user.id}
+        onToggle={handleUserChange}
+        toggled={user.isActive}
+      />)}
+    </div>
+  );
+};
 
 export default Users;
