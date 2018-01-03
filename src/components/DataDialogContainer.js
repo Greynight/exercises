@@ -1,19 +1,4 @@
-import React from 'react';
-
-
-
-import store from './../store';
-
-import { Box } from 'reflexbox';
-
-const styles = {
-  customWidth: {
-    width: 164,
-  }
-};
-
 import DataDialog from './DataDialog';
-
 import { connect } from 'react-redux';
 
 import {
@@ -32,7 +17,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(dataDialogHideAction());
   },
   handleDataSave: (data) => {
-    debugger
     dispatch(saveDataAction(data));
   }
 });

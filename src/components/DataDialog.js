@@ -7,6 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import Add from 'material-ui/svg-icons/content/add';
+import Remove from 'material-ui/svg-icons/content/remove';
 
 import { Flex, Box } from 'reflexbox';
 
@@ -16,8 +17,12 @@ const styles = {
   customWidth: {
     width: 164
   },
-  iconStyle: {
+  iconAdd: {
     paddingTop: 20,
+    cursor: 'pointer'
+  },
+  iconRemove: {
+    paddingTop: 40,
     cursor: 'pointer'
   }
 };
@@ -47,7 +52,7 @@ class DialogData extends React.Component {
         label="Ok"
         primary={true}
         keyboardFocused={true}
-        onTouchTap={this.props.handleDataSave}
+        onTouchTap={this.handleSave}
       />,
       <FlatButton
         label="Cancel"
@@ -71,22 +76,31 @@ class DialogData extends React.Component {
     return activeExercise.results.map((param, index) => {
       const paddingLeft = index === 0 ? 0 : 2;
       const paramName = this.capitalizeFirstLetter(param);
+      const key = `${param}-${num}`;
 
       return (
-        <Flex key={num}>
-          <Box pl={paddingLeft} key={`box-${param}-${num}`}>
-            <TextField
-              type="number"
-              name={paramName}
-              key={`field-${param}-${num}`}
-              floatingLabelText={paramName}
-              hintText={paramName}
-              onChange={this.handleParamChange}
-              style={styles.customWidth}
-            />
-          </Box>
-        </Flex>
+        <Box pl={paddingLeft} key={`box-${key}`}>
+          <TextField
+            type="number"
+            name={paramName}
+            id={key}
+            key={`field-${key}`}
+            floatingLabelText={paramName}
+            hintText={paramName}
+            onChange={this.handleParamChange}
+            style={styles.customWidth}
+          />
+        </Box>
       );
+    });
+  };
+
+  handleSave = () => {
+    this.props.handleDataSave({
+      data: this.state.values,
+      date: this.state.date,
+      user: this.state.user,
+      exercise: this.state.exerciseId
     });
   };
 
@@ -95,12 +109,19 @@ class DialogData extends React.Component {
   };
 
   handleParamChange = (event, value) => {
-    const type = event.currentTarget.name;
-    const values = {...this.state.values};
+    const param = event.currentTarget.id;
+    const paramType = param.split('-')[0];
+    const paramNum = param.split('-')[1];
+    let values = {...this.state.values};
+    const savedParam = values[paramType];
 
-    values[type] = +value;
+    if (!savedParam) {
+      values[paramType] = [];
+    }
 
-    this.setState({values, number: 1});
+    values[paramType][paramNum-1] = +value;
+
+    this.setState({values});
   };
 
   handleDateChange = (event, value) => {
@@ -109,23 +130,45 @@ class DialogData extends React.Component {
 
   handleExerciseChange = (event, index, exerciseId) => {
     this.setState({exerciseId, number: 1});
-
   };
 
-  handleOnAddClick = () => {
+  // TODO remove saved values in state
+  // TODO check how it works with filled fields
+  handleRemoveClick = () => {
+    const number = --this.state.number;
+    this.setState({number});
+  };
+
+  // TODO check how it works with filled fields
+  handleAddClick = () => {
     const number = ++this.state.number;
     this.setState({number});
   };
 
   render() {
     const num = this.state.number;
-
     const actions = this.generateActions();
     const usersItems = this.generateUsersItems();
     const fields = [];
 
     for (let i = 1; i <= num; i++) {
-      fields.push(this.generateFields(i));
+      let elm = null;
+
+      if (i > 1 && i === num) {
+        elm = (
+          <Flex key={i}>
+            {this.generateFields(i)}
+            <Remove
+              style={styles.iconRemove}
+              onClick={this.handleRemoveClick}
+            />
+          </Flex>
+        );
+      } else {
+        elm = (<Flex key={i}>{this.generateFields(i)}</Flex>);
+      }
+
+      fields.push(elm);
     }
 
     return (
@@ -161,8 +204,8 @@ class DialogData extends React.Component {
             </Box>
           </Flex>
           <Add
-            style={styles.iconStyle}
-            onClick={this.handleOnAddClick}
+            style={styles.iconAdd}
+            onClick={this.handleAddClick}
           />
           {fields}
         </Dialog>

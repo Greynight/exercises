@@ -25,7 +25,7 @@ async function saveData(data) {
     baseURL: process.env.REACT_APP_BASE_URL
   });
 
-  return await dataSource.post(process.env.REACT_APP_POST_DATA_URL, {data});/*.then(res => {
+  return await dataSource.post(process.env.REACT_APP_POST_DATA_URL, data);/*.then(res => {
     this.hideAddDataDialog();
     this.loadData();
   }).catch((err) => {

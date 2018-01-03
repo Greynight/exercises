@@ -6,7 +6,8 @@ import store from '../store';
 import {
   changeActiveUserAction,
   changeActiveExerciseAction,
-  changeActiveExerciseParamAction
+  changeActiveExerciseParamAction,
+  loadDataAction
 } from './../redux/actions';
 
 const mapStateToProps = (state) => ({
@@ -45,6 +46,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeActiveExerciseParamAction(event.currentTarget.id));
   }
 });
+
+store.dispatch(loadDataAction());
 
 const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
 

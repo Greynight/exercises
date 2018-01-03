@@ -10,7 +10,7 @@ import {
 
 import Config from '../config/Config';
 
-const config = new Config;
+const config = new Config();
 
 const initState = {
   data: [],
