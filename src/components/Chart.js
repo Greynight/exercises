@@ -1,6 +1,10 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 
+const style = {
+  textAlign: 'center'
+};
+
 const Chart = (props) => {
   const users = props.users;
   const activeExerciseId = props.activeExerciseId;
@@ -10,7 +14,7 @@ const Chart = (props) => {
   let data = props.data.filter(item => item.exercise === activeExerciseId);
 
   if (!data.length) {
-    return <h3>No data</h3>;
+    return <h3 style={style}>No data for chosen exercise</h3>;
   }
 
   data = data
@@ -34,6 +38,7 @@ const Chart = (props) => {
     }));
 
     let dataSet = {
+      fill: false,
       label: user.name,
       borderColor: user.color,
       backgroundColor: user.color,
@@ -43,10 +48,7 @@ const Chart = (props) => {
     dataSets.push(dataSet);
   }
 
-  // TODO after the chart is ready - add routing for exercises
-
   const chartOptions = {
-    fill: false,
     responsive: true,
     scales: {
       xAxes: [{

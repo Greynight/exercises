@@ -1,0 +1,40 @@
+// database
+https://mlab.com
+user: isidorenko
+account: greynight
+password: mara_47
+
+
+To connect using the mongo shell:
+mongo ds157499.mlab.com:57499/exercises -u <dbuser> -p <dbpassword>
+
+To connect using a driver via the standard MongoDB URI
+mongodb://<dbuser>:<dbpassword>@ds157499.mlab.com:57499/exercises
+
+table: stats
+db: exercises
+user/pass exercises
+API key: mTStNsP3wLqdRxg6Tz58e8LjBDsu10vt
+base api: https://api.mlab.com/api/1
+api docs: http://docs.mlab.com/data-api/
+
+get data
+GET /databases/{database}/collections/{collection}
+Example listing all documents in a given collection:
+https://api.mlab.com/api/1/databases/my-db/collections/my-coll?apiKey=myAPIKey
+
+insert document
+POST /databases/{database}/collections/{collection}
+Content-Type: application/json
+Body: <JSON data>
+Example (using jQuery):
+$.ajax( { url: "https://api.mlab.com/api/1/databases/my-db/collections/my-coll?apiKey=myAPIKey",
+		  data: JSON.stringify( { "x" : 1 } ),
+		  type: "POST",
+		  contentType: "application/json" } );
+
+Useful links
+https://github.com/mzabriskie/axios
+http://jxnblk.com/reflexbox/
+https://material.io/icons/
+http://www.material-ui.com/#/components/circular-progress

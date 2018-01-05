@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import {
   LOAD_DATA,
   SAVE_DATA,
@@ -10,38 +8,16 @@ import {
   DATA_DIALOG_HIDE
 } from '../redux/types';
 
-async function loadData() {
-  const dataSource = axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL
-  });
-
-  const result = await dataSource.get(process.env.REACT_APP_GET_DATA_URL, {});
-
-  return result.data;
-}
-
-async function saveData(data) {
-  const dataSource = axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL
-  });
-
-  return await dataSource.post(process.env.REACT_APP_POST_DATA_URL, data);/*.then(res => {
-    this.hideAddDataDialog();
-    this.loadData();
-  }).catch((err) => {
-    console.error(err);
-    this.hideAddDataDialog();
-  });*/
-}
+import Config from './../config/Config';
 
 export const loadDataAction = () => ({
   type: LOAD_DATA,
-  payload: loadData()
+  payload: Config.loadData()
 });
 
 export const saveDataAction = (data) => ({
   type: SAVE_DATA,
-  payload: saveData(data)
+  payload: Config.saveData(data)
 });
 
 export const changeActiveUserAction = (users) => ({

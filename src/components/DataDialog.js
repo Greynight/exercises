@@ -77,6 +77,7 @@ class DialogData extends React.Component {
       const paddingLeft = index === 0 ? 0 : 2;
       const paramName = this.capitalizeFirstLetter(param);
       const key = `${param}-${num}`;
+      const value = this.state.values[param] && this.state.values[param][num-1];
 
       return (
         <Box pl={paddingLeft} key={`box-${key}`}>
@@ -88,6 +89,7 @@ class DialogData extends React.Component {
             floatingLabelText={paramName}
             hintText={paramName}
             onChange={this.handleParamChange}
+            defaultValue={value}
             style={styles.customWidth}
           />
         </Box>
@@ -132,14 +134,20 @@ class DialogData extends React.Component {
     this.setState({exerciseId, number: 1});
   };
 
-  // TODO remove saved values in state
-  // TODO check how it works with filled fields
   handleRemoveClick = () => {
     const number = --this.state.number;
-    this.setState({number});
+
+    const activeExercise = this.state.exercises.find(exercise => exercise.id === this.state.exerciseId);
+    const values = this.state.values;
+
+    activeExercise.results.forEach(param => {
+      values[param].length = number;
+    });
+
+
+    this.setState({number, values});
   };
 
-  // TODO check how it works with filled fields
   handleAddClick = () => {
     const number = ++this.state.number;
     this.setState({number});

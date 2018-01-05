@@ -29,7 +29,6 @@ export default (state = initState, action) => {
       return {...state, data: action.payload};
 
     case SAVE_DATA:
-      // TODO reload data(on dialog close) or add new items to data
       return state;
 
     case ACTIVE_USER_CHANGE:
