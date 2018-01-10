@@ -3,10 +3,8 @@ import exercises from './exercises';
 import params from './params';
 
 import {
-  mLabLoadData,
-  mLabSaveData,
-  // localStorageLoadData,
-  // localStorageSaveData
+  localStorageLoadData,
+  localStorageSaveData
 } from './dataLoaders';
 
 const configData = {
@@ -23,12 +21,12 @@ class Config {
 
   static async loadData() {
     // can be replaced by any custom dataLoader
-    return mLabLoadData();
+    return localStorageLoadData();
   }
 
   static async saveData(data) {
     // can be replaced by any custom dataLoader
-    return mLabSaveData(data);
+    return localStorageSaveData(data);
   }
 
   getDefaultExerciseId() {
