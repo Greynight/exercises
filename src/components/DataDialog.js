@@ -144,7 +144,6 @@ class DialogData extends React.Component {
       values[param].length = number;
     });
 
-
     this.setState({number, values});
   };
 

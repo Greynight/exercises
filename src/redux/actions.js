@@ -5,7 +5,8 @@ import {
   ACTIVE_EXERCISE_CHANGE,
   ACTIVE_EXERCISE_PARAM_CHANGE,
   DATA_DIALOG_SHOW,
-  DATA_DIALOG_HIDE
+  DATA_DIALOG_HIDE,
+  SHOW_LOADER
 } from '../redux/types';
 
 import Config from './../config/Config';
@@ -41,4 +42,8 @@ export const dataDialogShowAction = () => ({
 
 export const dataDialogHideAction = () => ({
   type: DATA_DIALOG_HIDE
+});
+
+export const showLoader = () => ({
+  type: SHOW_LOADER
 });

@@ -10,8 +10,9 @@ const Chart = (props) => {
   const activeExerciseId = props.activeExerciseId;
   const activeParamId = props.activeParamId;
   const params = props.params;
+  let data = [...props.data];
 
-  let data = props.data.filter(item => item.exercise === activeExerciseId);
+  data = data.filter(item => item.exercise === activeExerciseId);
 
   if (!data.length) {
     return <h3 style={style}>No data for chosen exercise</h3>;

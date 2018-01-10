@@ -1,13 +1,14 @@
 import App from './App';
 
 import { connect } from 'react-redux';
-import store from '../store';
+import store from '../redux/store';
 
 import {
   changeActiveUserAction,
   changeActiveExerciseAction,
   changeActiveExerciseParamAction,
-  loadDataAction
+  loadDataAction,
+  showLoader
 } from './../redux/actions';
 
 const mapStateToProps = (state) => ({
@@ -18,7 +19,8 @@ const mapStateToProps = (state) => ({
   exercises: state.exercises,
   params: state.params,
   isDataDialogShown: state.isDataDialogShown,
-  users: state.users
+  users: state.users,
+  isLoading: state.isLoading
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -47,6 +49,7 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
+store.dispatch(showLoader());
 store.dispatch(loadDataAction());
 
 const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);

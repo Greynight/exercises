@@ -8,8 +8,8 @@ import params from './params';
 import {
   mLabLoadData,
   mLabSaveData,
-  localStorageLoadData,
-  localStorageSaveData
+  // localStorageLoadData,
+  // localStorageSaveData
 } from './dataLoaders';
 
 const configData = {
@@ -24,13 +24,13 @@ class Config {
     this.validateData();
   }
 
-  // any custom dataLoader can be used here
   static async loadData() {
+    // can be replaced by any custom dataLoader
     return mLabLoadData();
   }
 
-  // any custom dataLoader can be used here
   static async saveData(data) {
+    // can be replaced by any custom dataLoader
     return mLabSaveData(data);
   }
 
@@ -77,6 +77,17 @@ class Config {
       element.params.length &&
       element.hasOwnProperty('results') && Array.isArray(element.results) &&
       element.results.length
+    );
+  };
+
+  isDataItemCorrect = (element) => {
+    return (
+      typeof element === 'object' &&
+      element.hasOwnProperty('date') && (new Date(element.date)).toString() !== "Invalid Date" &&
+      element.hasOwnProperty('exercise') && element.hasOwnProperty('user') &&
+      element.hasOwnProperty('data') && typeof element.data === 'object' &&
+      this.data.exercises.find(item => item.id === element.exercise) &&
+      this.data.exercises.find(item => item.id === element.exercise).results.includes(Object.keys(element.data)[0])
     );
   };
 

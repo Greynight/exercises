@@ -1,13 +1,11 @@
 Small web application bootstrapped with create-react-app, using components from material-ui, axios to do ajax requests,
  reflexbox for page layout, chartJS for charts and redux as state container.
 
- How it looks:
+ Try it:
  https://greynight.github.io/exercises/
 
 
 
 TODO
-- loader
-- remove/hide real data
-- example data
+- errors processing
 - documentation(how to install/use)

@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 
 import {
   saveDataAction,
-  dataDialogHideAction
+  dataDialogHideAction,
+  showLoader
 } from './../redux/actions';
 
 const mapStateToProps = (state) => ({
@@ -17,6 +18,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(dataDialogHideAction());
   },
   handleDataSave: (data) => {
+    dispatch(showLoader());
     dispatch(saveDataAction(data));
   }
 });

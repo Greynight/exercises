@@ -8,10 +8,12 @@ import TopBar from './TopBar';
 import ExerciseParams from './ExerciseParams';
 import Users from './Users';
 import Exercises from './Exercises';
+import Loader from './Loader';
 
 const App = (props) => {
   return (
     <Flex wrap>
+      {props.isLoading ? <Loader/> : ''}
       <TopBar />
       <Box col={2}>
         <Box m={2}>

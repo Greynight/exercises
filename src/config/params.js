@@ -1,7 +1,5 @@
 const maxValue = (items, itemName) => {
   let values = items[itemName];
-
-  // const values = items.map(item => item[itemName]);
   return Math.max.apply(null, values);
 };
 

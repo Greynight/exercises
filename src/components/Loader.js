@@ -7,9 +7,11 @@ const Loader = (props) => {
   const styles = {
     backdrop: {
       backgroundColor: 'LightGrey',
+      position: 'absolute',
+      opacity: 0.6,
       width: '100%',
       height: '100%',
-      zIndex: 1000,
+      zIndex: 10000,
       minHeight: props.minHeight || 0
     }
   };
