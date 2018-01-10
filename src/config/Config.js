@@ -1,6 +1,3 @@
-// example data
-// "[{\"data\":{\"number\":[12,13]},\"date\":1514901897930,\"user\":\"ivan\",\"exercise\":\"pushups\"},{\"data\":{\"number\":[8,9]},\"date\":1512684000000,\"user\":\"ivan\",\"exercise\":\"pushups\"},{\"data\":{\"number\":[7,9]},\"date\":\"2017-12-27T22:00:00.000Z\",\"user\":\"ivan\",\"exercise\":\"pushups\"}]"
-
 import users from './users';
 import exercises from './exercises';
 import params from './params';
