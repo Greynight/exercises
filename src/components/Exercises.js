@@ -5,6 +5,7 @@ import MenuItem from 'material-ui/MenuItem';
 const Exercises = ({ exercises, value, handleExerciseChange }) => {
   return (
     <SelectField
+      fullWidth={true}
       floatingLabelText="Exercises"
       value={value}
       onChange={handleExerciseChange}

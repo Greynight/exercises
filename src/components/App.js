@@ -15,7 +15,7 @@ const App = (props) => {
     <Flex wrap>
       {props.isLoading ? <Loader/> : ''}
       <TopBar />
-      <Box col={2}>
+      <Box w={1/6} style={{minWidth: 200}}>
         <Box m={2}>
           <Exercises
             exercises={props.exercises}
@@ -30,7 +30,7 @@ const App = (props) => {
           handleParamChange={props.handleParamChange}
         />
       </Box>
-      <Box col={8}>
+      <Box w={3/4} style={{minWidth: 400}}>
         <Chart
           data={props.data}
           params={props.params}
@@ -38,7 +38,7 @@ const App = (props) => {
           activeExerciseId={props.activeExerciseId}
           activeParamId={props.activeParamId} />
       </Box>
-      <Box col={2} align="center">
+      <Box w={1/12} align="center" style={{minWidth: 100}}>
         <Box ml={6} mr={6}>
           <Users
             users={props.users}

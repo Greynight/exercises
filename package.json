@@ -18,7 +18,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.7.2",
     "redux-promise": "^0.5.3",
-    "reflexbox": "^2.2.3"
+    "reflexbox": "^3.0.0-0"
   },
   "scripts": {
     "start": "react-scripts start",
