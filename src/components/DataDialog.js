@@ -135,7 +135,7 @@ class DialogData extends React.Component {
   };
 
   handleRemoveClick = () => {
-    const number = --this.state.number;
+    const number = this.state.number - 1;
 
     const activeExercise = this.state.exercises.find(exercise => exercise.id === this.state.exerciseId);
     const values = this.state.values;
@@ -148,7 +148,7 @@ class DialogData extends React.Component {
   };
 
   handleAddClick = () => {
-    const number = ++this.state.number;
+    const number = this.state.number + 1;
     this.setState({number});
   };
 
