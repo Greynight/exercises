@@ -9,8 +9,8 @@ export default [{
   results: ['number'],
   params: ['totalNumber']
 }, {
-  id: 'barbellBenchPress',
-  name: 'Barbell Bench Press',
+  id: 'benchPress',
+  name: 'Bench Press',
   results: ['number', 'weight'],
   params: ['maxWeight', 'totalWeight']
 }];
