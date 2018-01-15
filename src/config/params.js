@@ -41,4 +41,12 @@ export default [{
   id: 'calories',
   name: 'Calories',
   formula: (items) => (items.map(item => item.calories))
+}, {
+  id: 'duration',
+  name: 'Duration',
+  formula: (items) => (items.map(item => item.duration))
+}, {
+  id: 'distance',
+  name: 'Distance',
+  formula: (items) => (items.map(item => item.distance))
 }];
